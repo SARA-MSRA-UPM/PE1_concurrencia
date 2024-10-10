@@ -21,4 +21,5 @@ jobs:
         env:
           STATEMENT_REPO_URL: ${{ secrets.STATEMENT_REPO_URL }}
         run: |
-          git push ${STATEMENT_REPO_URL} main
+          git remote add statement ${STATEMENT_REPO_URL}
+          git push statement main
