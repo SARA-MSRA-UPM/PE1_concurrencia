@@ -19,6 +19,6 @@ jobs:
 
       - name: Push to Mirror Repo
         env:
-          MIRROR_REPO_URL: ${{ secrets.MIRROR_REPO_URL }}
+          STATEMENT_REPO_URL: ${{ secrets.STATEMENT_REPO_URL }}
         run: |
-          git push https://github.com/SARA-MSRA-UPM/PE1_concurrencia main
+          git push ${STATEMENT_REPO_URL} main
