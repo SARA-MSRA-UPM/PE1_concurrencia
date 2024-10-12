@@ -1,0 +1,25 @@
+name: Sync statement repository
+
+on:
+  push:
+    branches:
+      - main
+jobs:
+  push_to_mirror:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "${{ github.event.head_commit.author.name }}"
+          git config --global user.email "${{ github.event.head_commit.author.email }}"
+
+      - name: Push to Mirror Repo
+        env:
+          STATEMENT_REPO_URL: ${{ secrets.STATEMENT_REPO_URL }}
+        run: |
+          git remote add statement ${STATEMENT_REPO_URL}
+          git push statement main
