@@ -89,7 +89,7 @@ datos leidos en un único objeto `DetectionSet`.
    distintos radares los obtendrá de `DetectionsSet`. 
       - Esta clase se implementará como otra hebra al igual que `Lector` o 
       `Radar`.
-      - Debe realizar la busqueda de puntos comunes cada un cierto tiempo, largo 
-      comparado con la frecuencia de detecciones, cada 5 segundos debería ser 
-      suficiente.
+      - Debe realizar la busqueda de puntos comunes cada un cierto tiempo, 
+      largo comparado con la frecuencia de detecciones, cada 5 segundos 
+      debería ser suficiente.
       - 
