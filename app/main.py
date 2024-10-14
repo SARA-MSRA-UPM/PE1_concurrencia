@@ -21,22 +21,22 @@ if __name__ == '__main__':
 
     # Create points
     points = [
-        CircularPoint(75, 75, 10),
-        CircularPoint(150, 150, 20),
-        EightPoint(100, 125)
+        EightPoint(100, 100)
     ]
 
-    # Create radar
-    radar = Radar(name="radar0",
-                  position=(AREA/2, AREA/2),
-                  detection_range=(AREA/2)*0.6,
-                  orientation=0,
-                  points=points,
-                  monitor=monitor)
+    # Create radars
+    radars = [
+        Radar(name="radar0",
+              position=(AREA/2, AREA/2),
+              detection_range=(AREA/2)*0.6,
+              orientation=0,
+              points=points,
+              monitor=monitor),
+    ]
 
     # Start radar and point threads
-    radar_thread = threading.Thread(target=radar.run)
-    radar_thread.start()
+    for radar in radars:
+        radar.start()
 
     for point in points:
         point.start()
@@ -52,9 +52,10 @@ if __name__ == '__main__':
     print("Lector stopped")
 
     # Stop all threads
-    radar.stop()
-    radar_thread.join()
-    print("Radar stopped")
+    for radar in radars:
+        radar.stop()
+        radar.join()
+    print("Radars stopped")
 
     for point in points:
         point.stop()

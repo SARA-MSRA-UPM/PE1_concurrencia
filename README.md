@@ -74,11 +74,22 @@ de puntos por varios radares distintos. Para esto es necesario haber
 completado el primer objetivo. Para esto se facilita el esqueleto de las 
 clases `DetetectionsSet` y `CommonDetectionsSearcher`. Aunque no es 
 obligatorio implementar la funcionalidad mediante estas clases es recomendado. 
+Deben existir al menos 3 radares que produzcan datos en al menos 2 monitores 
+distintos (cada radar solo puede estar conectado a un monitor). Cada monitor 
+tendrá un lector que consume sus datos. Los distintos lectores cargarán los 
+datos leidos en un único objeto `DetectionSet`.
 
    1. **Implementar DetectionsSet** Esta clase representa una estructura de 
    datos en la que se guardarán el conjunto de todas las detecciones de los 
-   distintos radares en ejecución. 
+   distintos radares en ejecución. Debe estar protegido frente a concurrencia 
+   al igual que la clase `Monitor`.
 
    2. **Implementar CommonDetectionsSearcher** Esta clase debe implementar la 
    funcionalidad de  busqueda de puntos comunes. Las detecciones de los 
-   distintos radares los obtendrá de `DetectionsSet`.
+   distintos radares los obtendrá de `DetectionsSet`. 
+      - Esta clase se implementará como otra hebra al igual que `Lector` o 
+      `Radar`.
+      - Debe realizar la busqueda de puntos comunes cada un cierto tiempo, largo 
+      comparado con la frecuencia de detecciones, cada 5 segundos debería ser 
+      suficiente.
+      - 
