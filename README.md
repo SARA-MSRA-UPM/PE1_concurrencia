@@ -92,4 +92,3 @@ datos leidos en un único objeto `DetectionSet`.
       - Debe realizar la busqueda de puntos comunes cada un cierto tiempo, 
       largo comparado con la frecuencia de detecciones, cada 5 segundos 
       debería ser suficiente.
-      - 
