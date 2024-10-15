@@ -1,6 +1,6 @@
-# Practica Guiada 1 - Concurrencia y Paralelismo
+# Practica Entregable 1 - Concurrencia y Paralelismo
 
-Este repositorio contiene el código de la práctica guiada "Concurrencia y
+Este repositorio contiene el código de la práctica entregable "Concurrencia y
 Paralelismo" de la asignatura Software Avanzado Radar (SARA) del Master en
 Sistemas Radar.
 
