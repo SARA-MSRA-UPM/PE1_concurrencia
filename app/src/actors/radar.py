@@ -3,21 +3,25 @@ import math
 from threading import Thread, Event
 from time import sleep
 # internal imports
-from ..actors.points.point import Point
-from ..base.monitor import Monitor
+from src.actors.points.point import Point
+from src.monitors.detections_monitor import DetectionsMonitor
+from src.models.radar_detection import RadarDetection
 
-INCREMENT = 30
+# Radar constants
+INCREMENT = 15
 REVOLUTIONS = 1
 
 
 class Radar(Thread):
-    def __init__(self,
-                 name: str,
-                 position: tuple[float, float],
-                 detection_range: float,
-                 orientation: float,
-                 points: list[Point],
-                 monitor: Monitor):
+    def __init__(
+            self,
+            name: str,
+            position: tuple[float, float],
+            detection_range: float,
+            orientation: float,
+            points: list[Point],
+            monitor: DetectionsMonitor,
+        ):
         super().__init__()
         # Radar properties
         self.name = name
@@ -25,10 +29,10 @@ class Radar(Thread):
         self.detection_range = detection_range
         self.orientation = orientation
         self.facing = 0
-        self.detection = self.detection_range
+        self.detections = set()
         self.points = points
-
         self.monitor = monitor
+
         # Threads properties
         self._stop_event = Event()
 
@@ -62,15 +66,28 @@ class Radar(Thread):
     def detect(self, points: list[Point]):
         # determine sector
         sector = (self.orientation + self.facing) % 360
+        distances_detected = set()
         for point in points:
             if self._in_sector(point, sector):
                 distance = self._distance(point)
-                if distance < self.detection:
-                    self.detection = distance
+                if self.detection_range >= distance:
+                    distances_detected.add(distance)
 
-        if self.detection != self.detection_range:
-            self.monitor.add_data(
+        for distance in distances_detected:
+            coordinates = self.get_cartesian_coords(distance, self.facing)
+            radar_detection = RadarDetection(
                 radar=self,
-                distance=self.detection,
-                facing_angle=self.facing
+                distance=distance,
+                facing=self.facing,
+                x=coordinates[0],
+                y=coordinates[1],
             )
+            self.detections.add(radar_detection)
+            self.monitor.update(detection=radar_detection)
+            print(f"Detección: {radar_detection}")
+
+    # PG1 methods
+    def get_cartesian_coords(self, distance: float, angle: float) -> tuple[float, float]:
+        x_relative: float = distance * math.cos(math.radians(angle + self.orientation))
+        y_relative: float = distance * math.sin(math.radians(angle + self.orientation))
+        return self.x + x_relative, self.y + y_relative
